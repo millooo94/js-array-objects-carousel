@@ -1,93 +1,95 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-	height: 100vh;
-}
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-.container-blur {
-	display: flex;
-	height: 100%;
-	backdrop-filter: blur(20px);
 }
 
 .slider {
-	margin: auto;
-	height: 80%;
-	width: 60%;
-	max-width: 600px;
-	max-height: 500px;
-	background-color: salmon;
+    position: relative;
+    /* margin: auto; */
+    height: 60%;
+    width: 60%;
+    /* max-width: 600px;
+    max-height: 400px; */
+    background-color: salmon;
 }
 
-.slider .slider-viewer {
-	position: relative;
-	height: 80%;
+.controls {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
 }
 
-.slider .controls {
-	position: absolute;
-	inset: 0;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	height: 100%;
-	z-index: 10;
+.btn-up, .btn-down {
+    margin: .5rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+    background-color: white;
 }
 
-.btn-left, .btn-right {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin: .5rem;
-	width: 3rem;
-	height: 3rem;
-	border-radius: 100%;
-	background-color: white;
+
+.slider-img {
+    display: none;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
-.btn-left:hover, .btn-right:hover {
-	background-color: lightblue;
-	cursor: pointer;
+
+.active {
+    display: block;
 }
 
-.hidden {
-	visibility: hidden;
+.thumbnail {
+    position: relative;
+    height: 60%;
+    width: 15%;
+    background-color: blue;
 }
 
-.slider .slider-img {
-	position: absolute;
-	inset: 0;
-	display: none;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	object-position: center;
+.thumbnail-img {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    object-fit: cover;
+    object-position: center;
 }
 
-.slider .slider-img.active {
-	display: block;
+.thumbnail-img-container {
+    position: relative;
+    width: 100%;
+    height: 20%;
 }
 
-.slider .thumbs {
-	position: relative;
-	display: flex;
-	height: 20%;
-}
 
-.slider .thumb-img {
-	flex: 1 0 0;
-	min-width: 0;
-	height: 100%;
-	object-fit: cover;
-	object-position: center;
+.dark {
 	filter: brightness(.4);
 }
 
-.slider .thumb-img.active {
-	border: 5px solid white;
+.light {
+	border: 3px solid gray;
 	filter: brightness(1);
 }
+
+.block {
+	position: absolute;
+	color: white;
+}
+

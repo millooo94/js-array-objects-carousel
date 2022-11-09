@@ -1,5 +1,9 @@
 const eleStart = document.querySelector('.start')
 const eleInvert = document.querySelector('.invert')
+const eleSlider = document.querySelector('.slider');
+const eleThumb = document.querySelector('.thumbnail');
+const eleBtnUp = document.querySelector('.btn-up');
+const eleBtnDown = document.querySelector('.btn-down');
 
 const arrImages = [
 	{
@@ -29,10 +33,16 @@ const arrImages = [
 	},
 ];
 
-const eleSliderViewer = document.querySelector('.slider-viewer');
-const eleSliderThumbs = document.querySelector('.thumbs');
-const eleBtnLeft = document.querySelector('.btn-left');
-const eleBtnRight = document.querySelector('.btn-right');
+
+const eleBlock = document.createElement('div')
+eleBlock.classList.add('block')
+eleSlider.append(eleBlock)
+eleBlock.style.position = 'relative'
+eleBlock.style.zIndex = '1000'
+
+
+
+
 
 for (let i = 0; i < arrImages.length; i++) {
 
@@ -42,46 +52,50 @@ for (let i = 0; i < arrImages.length; i++) {
 	if (i === 0) {
 		eleImg.classList.add('active');
 	}
-	eleSliderViewer.append(eleImg);
+	eleSlider.append(eleImg);
 
-	const eleThumb = document.createElement('img');
-	eleThumb.src =`img/${arrImages[i].image}`;
-	eleThumb.classList.add('thumb-img');
+	const eleThumbContainer = document.createElement('div')
+	eleThumbContainer.classList.add('thumbnail-img-container')
+	eleThumb.append(eleThumbContainer)
+	const eleThumbImg = document.createElement('img');
+	eleThumbImg.src =`img/${arrImages[i].image}`;
+	eleThumbImg.classList.add('thumbnail-img');
+	const eleTitle = document.createElement('div')
+	eleBlock.append(eleTitle)
+	const eleText = document.createElement('p')
+	eleBlock.append(eleText)
 	if (i === 0) {
-		eleThumb.classList.add('active');
+		eleThumbImg.classList.add('light');
+	} else {
+		eleThumbImg.classList.add('dark');
 	}
-	eleSliderThumbs.append(eleThumb);
+	eleThumbContainer.append(eleThumbImg);
 }
 
 
 const listEleImg = document.querySelectorAll('.slider-img');
-const listThumbs = document.querySelectorAll('.thumb-img');
+const listThumbs = document.querySelectorAll('.thumbnail-img');
 
 let activeIndex = 0;
-document.body.style.backgroundImage = `url('${arrImages[activeIndex]}')`;
-document.body.style.backgroundSize = 'cover';
 
-
-eleBtnRight.addEventListener('click', function () {
-
+function downSliding() {
 	listEleImg[activeIndex].classList.remove('active');
-	listThumbs[activeIndex].classList.remove('active');
+	listThumbs[activeIndex].classList.remove('light');
 
 	activeIndex++;
 	if (activeIndex === listEleImg.length) {
 		activeIndex = 0;
 	}
-
-
 	listEleImg[activeIndex].classList.add('active');
-	listThumbs[activeIndex].classList.add('active');
-	document.body.style.backgroundImage = `url('${arrImages[activeIndex]}')`;
-	document.body.style.backgroundSize = 'cover';
-});
+	listThumbs[activeIndex].classList.add('light');
+}
 
-eleBtnLeft.addEventListener('click', function () {
+
+eleBtnDown.addEventListener('click', downSliding);
+
+function upSliding() {
 	listEleImg[activeIndex].classList.remove('active');
-	listThumbs[activeIndex].classList.remove('active');
+	listThumbs[activeIndex].classList.remove('light');
 
 	if (activeIndex === 0) {
 		activeIndex = listEleImg.length;
@@ -89,69 +103,48 @@ eleBtnLeft.addEventListener('click', function () {
 	activeIndex--;
 
 	listEleImg[activeIndex].classList.add('active');
-	listThumbs[activeIndex].classList.add('active');
-	document.body.style.backgroundImage = `url('${arrImages[activeIndex]}')`;
-	document.body.style.backgroundSize = 'cover';
-});
-
-
-function autoLeft(){
-	listEleImg[activeIndex].classList.remove('active');
-	listThumbs[activeIndex].classList.remove('active');
-	if (activeIndex === 0) {
-		activeIndex = listEleImg.length;
-	}
-	activeIndex--;
-	listEleImg[activeIndex].classList.add('active');
-	listThumbs[activeIndex].classList.add('active');
-	document.body.style.backgroundImage = `url('${arrImages[activeIndex]}')`;
-	document.body.style.backgroundSize = 'cover';
+	listThumbs[activeIndex].classList.add('light');
 }
 
-
-function autoRight() {
-	listEleImg[activeIndex].classList.remove('active');
-	listThumbs[activeIndex].classList.remove('active');
-	activeIndex++;
-	if (activeIndex === listEleImg.length) {
-		activeIndex = 0;
-	}
-	listEleImg[activeIndex].classList.add('active');
-	listThumbs[activeIndex].classList.add('active');
-	document.body.style.backgroundImage = `url('${arrImages[activeIndex]}')`;
-	document.body.style.backgroundSize = 'cover';
-}
+eleBtnUp.addEventListener('click', upSliding);
 
 
 let isPaused = true
+
+let autoSlide
+
 
 eleStart.addEventListener('click', function(){
 
 	if (isPaused == true) {
 
-		auto1 = setInterval (autoRight, 3000)
+		autoSlide = setInterval (downSliding, 3000)
+		eleBtnUp.removeEventListener("click", upSliding)
+		eleBtnDown.removeEventListener("click", downSliding)
 		 isPaused = false
 
 	} else {
-		
-		isPaused = clearInterval(auto1)
+		eleBtnUp.addEventListener("click", upSliding)
+		eleBtnDown.addEventListener("click", downSliding)
+		isPaused = clearInterval(autoSlide)
 		isPaused = true
 	}
 
 })
 
-let isLeft = false
+let isDown = true
+
 
 eleInvert.addEventListener('click', function(){
 
-	if(isLeft == false && isPaused == false) {
-		clearInterval(auto1)
-		auto2 = setInterval (autoLeft, 3000)
-		isLeft = true
-	} else {
-		clearInterval(auto2)
-		setInterval (autoRight, 3000)
-		isLeft = false
+	if(isDown == true && isPaused === false) {
+		clearInterval(autoSlide)
+		autoSlide = setInterval (upSliding, 3000)
+		isDown = false
+	} else if (isDown == false && isPaused === false) {
+		clearInterval(autoSlide)
+		autoSlide = setInterval (downSliding, 3000)
+		isDown = true
 	}
 })
 
