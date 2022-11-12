@@ -34,25 +34,17 @@ const arrImages = [
 ];
 
 
-const eleBlock = document.createElement('div')
-eleBlock.classList.add('block')
-eleSlider.append(eleBlock)
-eleBlock.style.position = 'relative'
-eleBlock.style.zIndex = '1000'
-
-
-
-
-
 for (let i = 0; i < arrImages.length; i++) {
 
-	const eleImg = document.createElement('img');
-	eleImg.src = `img/${arrImages[i].image}`;
-	eleImg.classList.add('slider-img');
+
+
+	const eleSlideImg = document.createElement('div');
+	eleSlideImg.style.backgroundImage = `url('img/${arrImages[i].image}')`;
+	eleSlideImg.classList.add('slider-img');
 	if (i === 0) {
-		eleImg.classList.add('active');
+		eleSlideImg.classList.add('active');
 	}
-	eleSlider.append(eleImg);
+	eleSlider.append(eleSlideImg);
 
 	const eleThumbContainer = document.createElement('div')
 	eleThumbContainer.classList.add('thumbnail-img-container')
@@ -60,9 +52,14 @@ for (let i = 0; i < arrImages.length; i++) {
 	const eleThumbImg = document.createElement('img');
 	eleThumbImg.src =`img/${arrImages[i].image}`;
 	eleThumbImg.classList.add('thumbnail-img');
-	const eleTitle = document.createElement('div')
+	const eleBlock = document.createElement('div')
+    eleBlock.classList.add('block')
+    eleSlideImg.append(eleBlock)
+	const eleTitle = document.createElement('h2')
+	eleTitle.innerHTML = arrImages[i].title
 	eleBlock.append(eleTitle)
 	const eleText = document.createElement('p')
+	eleText.innerHTML = arrImages[i].text
 	eleBlock.append(eleText)
 	if (i === 0) {
 		eleThumbImg.classList.add('light');
@@ -118,14 +115,16 @@ eleStart.addEventListener('click', function(){
 
 	if (isPaused == true) {
 
-		autoSlide = setInterval (downSliding, 3000)
+		autoSlide = setInterval (downSliding, 1500)
 		eleBtnUp.removeEventListener("click", upSliding)
 		eleBtnDown.removeEventListener("click", downSliding)
+		eleStart.innerHTML = 'STOP'
 		 isPaused = false
 
 	} else {
 		eleBtnUp.addEventListener("click", upSliding)
 		eleBtnDown.addEventListener("click", downSliding)
+		eleStart.innerHTML = 'START'
 		isPaused = clearInterval(autoSlide)
 		isPaused = true
 	}
@@ -139,17 +138,12 @@ eleInvert.addEventListener('click', function(){
 
 	if(isDown == true && isPaused === false) {
 		clearInterval(autoSlide)
-		autoSlide = setInterval (upSliding, 3000)
+		autoSlide = setInterval (upSliding, 1500)
 		isDown = false
 	} else if (isDown == false && isPaused === false) {
 		clearInterval(autoSlide)
-		autoSlide = setInterval (downSliding, 3000)
+		autoSlide = setInterval (downSliding, 1500)
 		isDown = true
 	}
 })
-
-
-
-
-
 
